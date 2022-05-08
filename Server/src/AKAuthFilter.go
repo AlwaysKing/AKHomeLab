@@ -102,7 +102,7 @@ func init() {
 
 	// Setup HTTPS client
 	tlsConfig := &tls.Config{
-		RootCAs: caCertPool,
+		// RootCAs: caCertPool,
 	}
 	tlsConfig.BuildNameToCertificate()
 	transport := &http.Transport{TLSClientConfig: tlsConfig}

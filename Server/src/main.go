@@ -14,7 +14,7 @@ var Filter = &AKAuthFilter{
 	AppID:        "AKHomeLab",
 	Token:        "A_NPQqa,aQ*Yp8b%%iC7",
 	AppTokenName: "AKHomeLabAppToken",
-	AuthServer:   "https://akauth.alwaysking.cn:9999",
+	AuthServer:   "https://akauth.alwaysking.cn:16443",
 	AuthGrantCB:  "/AKGrantAuth",
 	AuthRevokeCB: "/AKRevokeAuth",
 }
@@ -29,6 +29,7 @@ func main() {
 	mime.AddExtensionType(".js", "application/javascript")
 	http.Handle("/", http.FileServer(http.Dir("./html")))
 	err := http.ListenAndServeTLS("0.0.0.0:9886", "./Cert/alwaysking.pem", "./Cert/alwaysking.key", Filter)
+	// err := http.ListenAndServe("0.0.0.0:9886", Filter)
 	Log.Error(err)
 	log.Fatal(err)
 }

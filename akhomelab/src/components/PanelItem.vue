@@ -22,7 +22,9 @@ export default {
   },
   methods: {
     Open() {
-      window.open(this.url + this.uri);
+      if (this.url) {
+        window.open(this.url + this.uri);
+      }
     },
   },
 };

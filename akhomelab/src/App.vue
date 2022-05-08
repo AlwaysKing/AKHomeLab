@@ -1,28 +1,46 @@
 <template>
   <div>
     <div class="Title">AlwaysKing HomeLab</div>
-    <div
-      class="Panel d-flex align-content-start justify-content-center flex-wrap"
-    >
-      <PanelItem
-        v-for="item in Apps"
-        :key="item"
-        :img="item.Image"
-        :title="item.AppName"
-        :url="item.URL"
-        :uri="item.URI"
-      ></PanelItem>
+
+    <div class="d-flex flex-wrap justify-content-center">
+      <PanelGroup
+        v-for="Group in Apps"
+        :key="Group.Title"
+        :Title="Group.Title"
+        :Image="Group.Image"
+      >
+        <div
+          class="
+            Panel
+            d-flex
+            align-content-start
+            justify-content-start
+            flex-wrap
+          "
+        >
+          <PanelItem
+            v-for="item in Group.List"
+            :key="item"
+            :img="item.Image"
+            :title="item.AppName"
+            :url="item.URL"
+            :uri="item.URI"
+          ></PanelItem>
+        </div>
+      </PanelGroup>
     </div>
   </div>
 </template>
 
 <script>
 import PanelItem from "./components/PanelItem.vue";
+import PanelGroup from "./components/PanelGroup.vue";
 
 export default {
   name: "App",
   components: {
     PanelItem,
+    PanelGroup,
   },
   data() {
     return {
@@ -34,7 +52,6 @@ export default {
     xmlHttp.open("GET", "/App.conf", false);
     xmlHttp.send(null);
     this.Apps = JSON.parse(xmlHttp.responseText);
-    console.log(xmlHttp.responseText);
   },
 };
 </script>
