@@ -13,6 +13,7 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 var Filter = &AKAuthFilter{
 	AppID:        "AKHomeLab",
 	Token:        "A_NPQqa,aQ*Yp8b%%iC7",
+	AppHost:      "https://homelab.alwaysking.cn:16443",
 	AppTokenName: "AKHomeLabAppToken",
 	AuthServer:   "https://akauth.alwaysking.cn:16443",
 	AuthGrantCB:  "/AKGrantAuth",
@@ -28,8 +29,7 @@ func main() {
 	LogOutPM = true
 	mime.AddExtensionType(".js", "application/javascript")
 	http.Handle("/", http.FileServer(http.Dir("./html")))
-	err := http.ListenAndServeTLS("0.0.0.0:9886", "./Cert/alwaysking.pem", "./Cert/alwaysking.key", Filter)
-	// err := http.ListenAndServe("0.0.0.0:9886", Filter)
+	err := http.ListenAndServe("0.0.0.0:9886", Filter)
 	Log.Error(err)
 	log.Fatal(err)
 }
