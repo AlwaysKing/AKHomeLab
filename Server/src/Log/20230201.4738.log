@@ -1,0 +1,12 @@
+2023/02/01 23:09:19         Auth.go:42                       [Error] check auth 无效用户名 
+2023/02/01 23:09:22         Auth.go:42                       [Error] check auth 无效用户名 
+2023/02/01 23:09:25         Auth.go:42                       [Error] check auth 无效用户名 
+2023/02/01 23:09:32         Auth.go:42                       [Error] check auth 无效用户名 
+2023/02/01 23:09:34         Auth.go:42                       [Error] check auth 无效用户名 
+2023/02/01 23:35:18         main.go:97                       [Info]  发送验证信息 alwaysking
+2023/02/01 23:37:56         main.go:97                       [Info]  发送验证信息 alwaysking
+2023/02/01 23:46:12         main.go:97                       [Info]  发送验证信息 alwaysking
+2023/02/01 23:47:39         main.go:97                       [Info]  发送验证信息 alwaysking
+2023/02/01 23:47:46         Auth.go:62                       [Info]  check auth 成功 alwaysking
+2023/02/01 23:48:16         main.go:97                       [Info]  发送验证信息 alwaysking
+2023/02/01 23:48:27         Auth.go:62                       [Info]  check auth 成功 alwaysking
