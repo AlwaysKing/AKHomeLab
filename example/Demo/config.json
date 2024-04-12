@@ -1,0 +1,26 @@
+{
+  "Title":"Demo's Lab",
+  "Recent":[
+    "Google", "ChatGpt"
+  ],  
+  "Apps":[
+    {
+      "Title": "搜索引擎",
+      "Image": "search.png",
+      "List": [
+        { "AppName": "Baidu", "URL": "https://www.baidu.com", "Image": "baidu.png" },
+        { "AppName": "Google", "URL": "https://www.google.com",  "Image": "google.png" },
+        { "AppName": "Yandex", "URL": "https://yandex.com/",  "Image": "yandex.png" }
+      ]
+    },
+    {
+      "Title": "AI助手",
+      "Image": "ai.png",
+      "List": [
+        { "AppName": "ChatGpt", "URL": "https://chat.openai.com/",  "Image": "chatgpt.png" },
+        { "AppName": "Claude", "URL": "https://claude.ai/",  "Image": "claude.png" },
+        { "AppName": "通义千问", "URL": "https://tongyi.aliyun.com/qianwen/", "Image": "tongyiqianwen.png" }
+      ]
+    }
+  ]
+  }
