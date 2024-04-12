@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="Title">AlwaysKing HomeLab</div>
+    <div class="Title">{{ Title }}</div>
 
     <div v-if="!Login">
       <div class="SubTitle">
@@ -27,15 +27,7 @@
       </div>
       <div class="d-flex flex-wrap justify-content-center">
         <div class="Panel d-flex align-content-start justify-content-center flex-wrap">
-          <PanelItem
-            v-for="item in Recent"
-            :key="item"
-            :img="item.Image"
-            :title="item.AppName"
-            :url="item.URL"
-            :uri="item.URI"
-            :SmallIcon="TopSmall"
-          ></PanelItem>
+          <PanelItem v-for="item in Recent" :key="item" :img="item.Image" :title="item.AppName" :url="item.URL" :SmallIcon="TopSmall"></PanelItem>
         </div>
       </div>
       <div class="SubTitle" style="margin-top: 30px">
@@ -63,15 +55,7 @@
       <div class="d-flex flex-wrap justify-content-center">
         <PanelGroup v-for="Group in Apps" :key="Group.Title" :Title="Group.Title" :Image="Group.Image" :SmallIcon="AppsSmall">
           <div class="Panel d-flex align-content-start justify-content-start flex-wrap" :class="{ AppSmallIcon: AppsSmall }">
-            <PanelItem
-              v-for="item in Group.List"
-              :key="item"
-              :img="item.Image"
-              :title="item.AppName"
-              :url="item.URL"
-              :uri="item.URI"
-              :SmallIcon="AppsSmall"
-            ></PanelItem>
+            <PanelItem v-for="item in Group.List" :key="item" :img="item.Image" :title="item.AppName" :url="item.URL" :SmallIcon="AppsSmall"></PanelItem>
           </div>
         </PanelGroup>
       </div>
@@ -158,6 +142,7 @@ export default {
       LoginError: 0,
       TopSmall: false,
       AppsSmall: true,
+      Title: "",
       Apps: [],
       Recent: [],
     };
@@ -190,6 +175,8 @@ export default {
         data.Recent.forEach((element) => {
           this.Recent.push(AllApps[element]);
         });
+
+        this.Title = data.Title;
       } else {
         this.Login = true;
       }

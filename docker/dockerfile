@@ -1,0 +1,5 @@
+FROM alpine as AKHomeLab
+RUN mkdir /data
+COPY akhomelab /opt/app/
+COPY -R html /opt/app/html
+CMD ["/opt/app/akhomelab"]

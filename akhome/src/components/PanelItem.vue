@@ -1,14 +1,14 @@
 <template>
   <div class="Box d-flex flex-column align-items-center" @click="Open" v-if="!SmallIcon">
     <div class="Image-Board d-flex justify-content-center align-items-center">
-      <img class="Image" :src="img" />
+      <img class="Image" :src="realImg" />
     </div>
     <div>{{ title }}</div>
   </div>
 
   <div class="Small" @click="Open" v-else>
     <div class="SmallImage-Board">
-      <img class="SmallImage" :src="img" />
+      <img class="SmallImage" :src="realImg" />
     </div>
     <div>{{ title }}</div>
   </div>
@@ -22,15 +22,28 @@ export default {
     img: String,
     title: String,
     url: String,
-    uri: String,
     SmallIcon: Boolean,
+  },
+  data() {
+    return {
+      baseUrl: "",
+      realImg: "",
+    };
   },
   methods: {
     Open() {
       if (this.url) {
-        window.open(this.url + this.uri);
+        window.open(this.url);
       }
     },
+  },
+  mounted() {
+    if (this.img.startsWith("http")) {
+      this.realImg = this.img;
+    } else {
+      let token = localStorage.getItem("token") || "";
+      this.realImg = this.baseUrl + "/icon?name=" + this.img + "&token=" + token;
+    }
   },
 };
 </script>

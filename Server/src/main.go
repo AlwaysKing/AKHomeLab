@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"mime"
 	"net/http"
+	"os"
 	"sync"
 	"time"
 )
@@ -26,6 +27,9 @@ type Auth struct {
 
 var USERLIST map[string]*Config
 var USERLIST_LOCKER = &sync.RWMutex{}
+
+var dataRoot string = ""
+var htmlRoot string = ""
 
 func cors(w http.ResponseWriter, r *http.Request) bool {
 	w.Header().Set("Access-Control-Allow-Origin", "*")                                                            // 允许访问所有域，可以换成具体url，注意仅具体url才能带cookie信息
@@ -148,14 +152,14 @@ func Data(w http.ResponseWriter, r *http.Request) {
 	}
 
 	USERLIST_LOCKER.Lock()
-	user, ok := USERLIST[name]
+	_, ok := USERLIST[name]
 	USERLIST_LOCKER.Unlock()
 	if !ok {
 		w.Write([]byte(`{"status":false}`))
 		return
 	}
 
-	data, err := ioutil.ReadFile(user.File)
+	data, err := ioutil.ReadFile(dataRoot + "/" + name + "/config.json")
 	if err != nil {
 		Log.Error("读取 config.json 文件失败")
 		w.Write([]byte(`{"status":false}`))
@@ -166,19 +170,81 @@ func Data(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(data))
 }
 
+// 获取Icon文件
+func Icon(w http.ResponseWriter, r *http.Request) {
+	if cors(w, r) {
+		return
+	}
+	// 检查token
+	token := r.URL.Query().Get("token")
+	vaild, _, name := ParseToken(token)
+	if !vaild {
+		w.Write([]byte(`{"status":false}`))
+		return
+	}
+
+	USERLIST_LOCKER.Lock()
+	_, ok := USERLIST[name]
+	USERLIST_LOCKER.Unlock()
+	if !ok {
+		http.ServeFile(w, r, htmlRoot+"/logo.png")
+		return
+	}
+
+	// 获取参数
+	icon := r.URL.Query().Get("name")
+	// 返回文件内容
+	http.ServeFile(w, r, dataRoot+"/"+name+"/icon/"+icon)
+}
+
+func initPath() bool {
+	// 先初始化 dataRoot
+	for _, item := range []string{"/data", "./data"} {
+		_, err := os.Stat(item)
+		if err == nil {
+			dataRoot = item
+			break
+		}
+	}
+
+	if dataRoot == "" {
+		Log.Error("data 目录不存在")
+		return false
+	}
+
+	// 然后初始化htmlRoot
+	for _, item := range []string{dataRoot + "/html", "/opt/app/html"} {
+		_, err := os.Stat(item)
+		if err == nil {
+			htmlRoot = item
+			break
+		}
+	}
+
+	if htmlRoot == "" {
+		Log.Error("html 目录不存在")
+		return false
+	}
+
+	return true
+}
+
 func main() {
+	Log.Out = &AKFMTLOGOUT{}
+
+	if !initPath() {
+		Log.Error("初始化目录失败")
+		return
+	}
+
 	// 日志初始化
 	rand.Seed(time.Now().UnixNano())
-	FileLog := &AKFILELOGOUT{}
-	FileLog.Init("./Log/", 30)
-	Log.Out = FileLog
-	LogOutPM = true
 
 	// 加载配置
 	USERLIST = make(map[string]*Config, 0)
 	TMPAUTH = make(map[string]*Auth)
 
-	data, err := ioutil.ReadFile("config.json")
+	data, err := ioutil.ReadFile(dataRoot + "/config.json")
 	if err != nil {
 		Log.Error("读取 config.json 文件失败")
 		return
@@ -197,12 +263,13 @@ func main() {
 	}
 
 	mime.AddExtensionType(".js", "application/javascript")
-	http.Handle("/", http.FileServer(http.Dir("./html")))
 	http.HandleFunc("/checktoken", CheckToken)
 	http.HandleFunc("/sendauth", SendAuth)
 	http.HandleFunc("/gentoken", GenToken)
 	http.HandleFunc("/refreshtoken", RefreshToken)
 	http.HandleFunc("/data", Data)
+	http.HandleFunc("/icon", Icon)
+	http.Handle("/", http.FileServer(http.Dir(htmlRoot)))
 	err = http.ListenAndServe("0.0.0.0:9886", nil)
 	Log.Error(err)
 	log.Fatal(err)
