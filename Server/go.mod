@@ -1,4 +1,4 @@
-module AKHomeLab
+module HomeLab
 
 go 1.18
 

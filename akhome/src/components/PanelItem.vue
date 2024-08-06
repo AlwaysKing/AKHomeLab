@@ -1,5 +1,5 @@
 <template>
-  <div class="Box d-flex flex-column align-items-center" @click="Open" v-if="!SmallIcon">
+  <div class="Box d-flex flex-column align-items-center" @click="Open" v-if="!smallIcon">
     <div class="Image-Board d-flex justify-content-center align-items-center">
       <img class="Image" :src="realImg" />
     </div>
@@ -22,7 +22,14 @@ export default {
     img: String,
     title: String,
     url: String,
-    SmallIcon: Boolean,
+    replace: Boolean,
+    smallIcon: Boolean,
+  },
+  data() {
+    return {
+      baseUrl: "",
+      realImg: "",
+    };
   },
   data() {
     return {
@@ -33,7 +40,13 @@ export default {
   methods: {
     Open() {
       if (this.url) {
-        window.open(this.url);
+        if (this.replace) {
+          console.log("replace");
+          window.location.replace(this.url);
+        } else {
+          console.log("open");
+          window.open(this.url);
+        }
       }
     },
   },

@@ -16,7 +16,6 @@ import (
 type Config struct {
 	Name string
 	Addr string
-	File string
 }
 
 type Auth struct {
@@ -199,7 +198,7 @@ func Icon(w http.ResponseWriter, r *http.Request) {
 
 func initPath() bool {
 	// 先初始化 dataRoot
-	for _, item := range []string{"/data", "./data"} {
+	for _, item := range []string{"/data", "./data", "src/data"} {
 		_, err := os.Stat(item)
 		if err == nil {
 			dataRoot = item
@@ -213,7 +212,7 @@ func initPath() bool {
 	}
 
 	// 然后初始化htmlRoot
-	for _, item := range []string{dataRoot + "/html", "/opt/app/html"} {
+	for _, item := range []string{dataRoot + "/html", "/opt/app/html", "./html", "src/html"} {
 		_, err := os.Stat(item)
 		if err == nil {
 			htmlRoot = item
@@ -232,6 +231,7 @@ func initPath() bool {
 func main() {
 	Log.Out = &AKFMTLOGOUT{}
 
+	// 初始化目录
 	if !initPath() {
 		Log.Error("初始化目录失败")
 		return
@@ -270,6 +270,7 @@ func main() {
 	http.HandleFunc("/data", Data)
 	http.HandleFunc("/icon", Icon)
 	http.Handle("/", http.FileServer(http.Dir(htmlRoot)))
+	Log.Info("服务启动成功: http://localhost:9886")
 	err = http.ListenAndServe("0.0.0.0:9886", nil)
 	Log.Error(err)
 	log.Fatal(err)
